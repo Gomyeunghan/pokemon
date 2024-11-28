@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import S from "./[id].module.css";
 import GlobalLayout from "@/layout/globalLayout";
 import { ReactNode, useEffect, useState } from "react";
+import { fetchLanguage } from "@/lib/pokelanguage";
+import { fetchType } from "@/lib/fetchType";
 
 export const getStaticPaths = async () => {
   return {
@@ -22,6 +24,8 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
       getOnePokemon(String(id)),
       fetchKoreanName(String(id)),
     ]);
+    const type = await fetchType(poke.types);
+
     const flavorText = pokeName.flavor_text_entries.filter(
       (item) => item.language.name === "ko"
     );
@@ -40,7 +44,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
     }
 
     return {
-      props: { poke, pokeName, randomText },
+      props: { poke, pokeName, randomText, type },
     };
   } catch {
     return {
@@ -53,10 +57,12 @@ export default function Pokemon({
   poke,
   pokeName,
   randomText,
+  type,
 }: {
   poke: Pokemon;
   pokeName: korean;
   randomText: { flavor_text: string };
+  type: { name: string; names: { name: string }[] }[];
 }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -68,6 +74,7 @@ export default function Pokemon({
   if (router.isFallback || isLoading) {
     return <div>Loading...</div>;
   }
+  console.log(type);
   console.log(pokeName);
 
   return (
@@ -82,10 +89,15 @@ export default function Pokemon({
         </div>
         <div className={S.info}>
           <p>{randomText.flavor_text}</p>
-          <h2>TYPE</h2>
+          <h2 className={S.h2}>TYPE</h2>
           <ul>
-            {poke.types.map((type) => {
-              return <li key={type.slot}>{type.type.name}</li>;
+            {type.map((item, index) => {
+              return (
+                <li key={index} className={S[item.name]}>
+                  <span className={item.name}></span>
+                  {item.names[1]?.name || "알수없음"}
+                </li>
+              );
             })}
           </ul>
         </div>

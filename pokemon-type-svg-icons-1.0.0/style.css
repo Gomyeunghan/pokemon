@@ -1,0 +1,40 @@
+html body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 1rem;
+  background: #effdff;
+}
+
+.wrapper {
+  width: 800px;
+  margin: auto auto;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(6, 1fr);
+  align-content: center;
+  align-items: center;
+}
+
+.icon {
+  border-radius: 100%;
+  height: 100px;
+  width: 100px;
+  margin: auto;
+  transition: 200ms all;
+}
+
+.icon:hover {
+  filter: saturate(200%);
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.icon img {
+  height: 60%;
+  width: 60%;
+  margin: 20%;
+}

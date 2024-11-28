@@ -1,5 +1,5 @@
 export const findKoreanName = async (value: string) => {
-  let currentUrl = "https://pokeapi.co/api/v2/pokemon-species/";
+  let currentUrl = "https://pokeapi.co/api/v2/pokemon-species/?limit=1500";
 
   while (currentUrl) {
     const response = await fetch(currentUrl);
@@ -15,6 +15,8 @@ export const findKoreanName = async (value: string) => {
       if (koreanNameEntry?.name === value) {
         console.log(pokedata);
         return pokedata; // 한국어 이름을 찾으면 해당 포켓몬 데이터 반환
+      } else {
+        console.log("없음");
       }
     }
 

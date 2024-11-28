@@ -1,0 +1,88 @@
+.bug {
+  background: #92bc2c;
+  content: url("/icons/bug.svg");
+}
+
+.dark {
+  background: #595761;
+  content: url("/icons/dark.svg");
+}
+
+.dragon {
+  background: #0c69c8;
+  content: url("/icons/dragon.svg");
+}
+
+.electric {
+  background: #f2d94e;
+  content: url("/icons/electric.svg");
+}
+
+.fire {
+  background: #fba54c;
+  content: url("/icons/fire.svg");
+}
+
+.fairy {
+  background: #ee90e6;
+}
+
+.fighting {
+  background: #d3425f;
+  content: url("/icons/fighting.svg");
+}
+
+.flying {
+  background: #a1bbec;
+  content: url("/icons/flying.svg");
+}
+
+.ghost {
+  background: #5f6dbc;
+  content: url("/icons/ghost.svg");
+}
+
+.grass {
+  background: #5fbd58;
+  content: url("/icons/grass.svg");
+}
+
+.ground {
+  background: #da7c4d;
+  content: url("/icons/ground.svg");
+}
+
+.ice {
+  background: #75d0c1;
+  content: url("/icons/ice.svg");
+}
+
+.normal {
+  background: #a0a29f;
+  content: url("/icons/normal.svg");
+}
+
+.poison {
+  background: #b763cf;
+  content: url("/icons/poison.svg");
+}
+
+.psychic {
+  background: #fa8581;
+  content: url("/icons/psychic.svg");
+}
+
+.rock {
+  background: #c9bb8a;
+  content: url("/icons/rock.svg");
+}
+
+.steel {
+  background: #5695a3;
+  content: url("/icons/steel.svg");
+}
+
+.water {
+  background: #539ddf;
+  content: url("/icons/water.svg");
+}

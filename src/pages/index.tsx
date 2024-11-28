@@ -6,18 +6,18 @@ import { Pokemon } from "@/types/pokemon";
 import { ReactNode, useState } from "react";
 import Card from "./card";
 import S from "./index.module.css";
-export const getStaticProps = async () => {
+
+export const getStaticProps = async ({ offset = 0 }: { offset: number }) => {
   const pokemon = await getAllPokemon(
-    `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=0/`
+    `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${offset}/`
   );
   const koreanName = await Promise.all(
     pokemon!.map(async (poke) => {
       const data = await fetchKoreanName(poke.id);
-      console.log(data);
       return data;
     })
   );
-  return { props: { pokemon, koreanName } };
+  return { props: { pokemon, koreanName, nextOffset: offset + 20 } };
 };
 
 export default function Home({
@@ -59,7 +59,10 @@ export default function Home({
 
   return (
     <>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+      <div
+        style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
+        className={S.container}
+      >
         {pokemonList.map((poke: Pokemon) => {
           const koreanData = koreanNameList[poke.id - 1];
           return (
