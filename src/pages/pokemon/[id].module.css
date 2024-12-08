@@ -3,12 +3,22 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  flex-wrap: nowrap;
   margin: 0 auto;
+  padding: 25px;
   width: 80%;
   height: 100vh;
   background-color: white;
   box-shadow: rgba(100, 100, 100, 0.142) 0px 0px 29px 0px;
 }
+
+@media (max-width: 768px) {
+  .box {
+    width: 100%;
+    height: auto;
+  }
+}
+
 .container {
   width: 100%;
   display: flex;
@@ -20,6 +30,11 @@
   max-width: 200px;
   min-width: 200px;
 }
+
+.h1 {
+  margin: 0;
+}
+
 .h2 {
   background-color: white;
 }
@@ -33,6 +48,8 @@
   gap: 20px;
 }
 .info p {
+  text-align: center;
+  padding: 20px;
   font-size: 1rem;
 }
 .info ul {

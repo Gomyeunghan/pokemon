@@ -3,13 +3,20 @@ import { getAllPokemon } from "@/lib/pokemon";
 import { fetchKoreanName } from "@/lib/pokemonKorean";
 import { korean } from "@/types/korean";
 import { Pokemon } from "@/types/pokemon";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Card from "./card";
 import S from "./index.module.css";
+import { useRouter } from "next/router";
+import { GetServerSidePropsContext } from "next";
+import { useFetchPokemonData } from "@/lib/useFetchPokemonData";
+import Head from "next/head";
 
-export const getStaticProps = async ({ offset = 0 }: { offset: number }) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const query = context.query;
   const pokemon = await getAllPokemon(
-    `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${offset}/`
+    `https://pokeapi.co/api/v2/pokemon/?limit=${Number(query.limit)}&offset=0/`
   );
   const koreanName = await Promise.all(
     pokemon!.map(async (poke) => {
@@ -17,35 +24,47 @@ export const getStaticProps = async ({ offset = 0 }: { offset: number }) => {
       return data;
     })
   );
-  return { props: { pokemon, koreanName, nextOffset: offset + 20 } };
+
+  return {
+    props: { pokemon, koreanName, query: context.query },
+  };
 };
 
 export default function Home({
   pokemon,
   koreanName,
+  query,
 }: {
   pokemon: Pokemon[];
   koreanName: korean[];
+  query: { limit: string };
 }) {
+  const router = useRouter();
+  const [currentLimit, setCurrentLimit] = useState(Number(query.limit));
   const [pokemonList, setPokemonList] = useState(pokemon);
   const [koreanNameList, setKoreanNameList] = useState(koreanName);
-  const [offset, setOffset] = useState(0);
-  const handleClick = async () => {
-    const newOffset = offset + 20;
-    setOffset(newOffset);
+  useEffect(() => {
+    router.push(`/?limit=${currentLimit}`);
+  }, []);
 
+  const handleClick = async () => {
+    const newLimit = currentLimit + 20;
+    setCurrentLimit(newLimit);
+    await router.push(`?limit=${newLimit}`, undefined, {
+      shallow: true,
+    });
     try {
       const newPokemon = await getAllPokemon(
-        `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${newOffset}/`
+        `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${currentLimit}}/`
       );
 
       if (newPokemon) {
         setPokemonList([...pokemonList, ...newPokemon]);
-        console.log(pokemonList);
         const koreanName = await Promise.all(
           newPokemon!.map(async (poke: Pokemon): Promise<korean> => {
             const data = await fetchKoreanName(poke.id);
-            return data;
+
+            return data!;
           })
         );
         if (koreanName && koreanName.length > 0) {
@@ -59,17 +78,24 @@ export default function Home({
 
   return (
     <>
-      <div
-        style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
+      <Head>
+        <title>포켓몬 도감</title>
+        <meta
+          property="og:image"
+          content="/International_Pokémon_logo.svg.webp"
+        />
+        <link rel="icon" href="/pokemon1702772640.png"></link>
+      </Head>
+
+      <main
+        style={{ display: "flex", flexWrap: "wrap", gap: "50px" }}
         className={S.container}
       >
-        {pokemonList.map((poke: Pokemon) => {
+        {pokemonList.map((poke: Pokemon, index: number) => {
           const koreanData = koreanNameList[poke.id - 1];
-          return (
-            <Card key={poke.id} poke={poke} koreanData={koreanData}></Card>
-          );
+          return <Card key={index} poke={poke} koreanData={koreanData}></Card>;
         })}
-      </div>
+      </main>
       <button onClick={handleClick} className={S.button}>
         더보기
       </button>

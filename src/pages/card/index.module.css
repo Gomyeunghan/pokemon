@@ -1,25 +1,37 @@
 .container {
+  /* background-color: gray; */
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 20%;
   flex-grow: 1;
   gap: 10px;
 }
+
 .container img {
-  border: 1px solid rgb(200, 200, 200);
-  border-radius: 10px;
   width: 100%;
+  overflow: hidden;
 }
 .name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: inherit;
   font-weight: bold;
 }
 .Link {
-  width: 80%;
+  overflow: hidden;
+  border-radius: 10px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-decoration: none;
   color: black;
   gap: 10px;
+}
+.motion {
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 20px;
 }
