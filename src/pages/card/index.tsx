@@ -29,7 +29,7 @@ export default function Card({
     setMousePosition({ x: 0, y: 0 });
   };
   return (
-    <div key={poke.id} className={S.container}>
+    <div key={poke?.id} className={S.container}>
       <motion.div
         className={S.motion}
         ref={cardRef}
@@ -65,7 +65,7 @@ export default function Card({
           },
         }}
       >
-        <Link href={`pokemon/${poke.id}`} className={S.Link}>
+        <Link href={`pokemon/${poke?.id}`} className={S.link}>
           <div
             style={{
               width: "100%",
@@ -83,7 +83,7 @@ export default function Card({
         `,
             }}
           ></div>
-          <img src={poke.sprites.front_default}></img>
+          <img src={poke?.sprites.front_default}></img>
         </Link>
       </motion.div>
 
