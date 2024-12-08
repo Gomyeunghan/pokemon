@@ -101,7 +101,10 @@ export default function Pokemon({
     <>
       <Head>
         <title>{filterName ? filterName[0].name : ""}</title>
-        <meta property="og:image" content={poke.sprites.front_default} />
+        <meta
+          property="og:image"
+          content={poke.sprites.front_default || "/pokemon1702772640.png"}
+        />
         <link rel="icon" href="/pokemon1702772640.png"></link>
       </Head>
       <div className={S.box}>
