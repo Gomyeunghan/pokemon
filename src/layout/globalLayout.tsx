@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import S from "./globalLayout.module.css";
 import { findKoreanName } from "@/lib/findKoreanName";
 import { useRouter } from "next/router";
