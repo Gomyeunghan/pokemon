@@ -115,7 +115,7 @@ export default function Home({
         <title>포켓몬 도감</title>
         <meta
           property="og:image"
-          content="/International_Pokémon_logo.svg.webp"
+          content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png"
         />
         <link rel="icon" href="/pokemon1702772640.png"></link>
       </Head>
