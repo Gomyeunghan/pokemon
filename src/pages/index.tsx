@@ -54,6 +54,8 @@ export default function Home({
 
   useEffect(() => {
     setLoading(true);
+
+    router.push("/?page=0&pageGroup=1");
     const fetchPokemon = async () => {
       const offset = page * 20;
       const newPokemon: Pokemon[] =
@@ -115,15 +117,12 @@ export default function Home({
         <title>포켓몬 도감</title>
         <meta
           property="og:image"
-          content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png"
+          content="International_Pokémon_logo.svg.webp"
         />
         <link rel="icon" href="/pokemon1702772640.png"></link>
       </Head>
       {!isLoading ? (
-        <main
-          style={{ display: "flex", flexWrap: "wrap", gap: "50px" }}
-          className={S.container}
-        >
+        <main className={S.container}>
           {pokemonList.map((poke: Pokemon, index: number) => {
             const koreanData = koreanNameList[index];
 

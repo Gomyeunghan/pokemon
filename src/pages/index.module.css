@@ -5,7 +5,6 @@
   background-color: #2a72b9;
   color: white;
   border: 1px solid #2a72b9;
-  margin: 80px 0;
   cursor: pointer;
 }
 .next_button {
@@ -27,6 +26,9 @@
   text-align: center;
 }
 .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
   width: 80%;
   padding: 100px;
   background-color: white;
@@ -47,10 +49,23 @@
   text-align: center;
 }
 .button_wrapper {
+  display: block;
   width: 80%;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   gap: 1%;
+}
+
+@media (max-width: 768px) {
+  .container {
+    overflow: scroll;
+    padding: 0;
+    width: 100%;
+    justify-content: space-between;
+    gap: 1px;
+  }
+  .button_wrapper {
+  }
 }

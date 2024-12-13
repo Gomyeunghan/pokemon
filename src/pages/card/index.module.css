@@ -35,3 +35,11 @@
   border: 1px solid rgb(200, 200, 200);
   border-radius: 20px;
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+    justify-content: center;
+    width: 30%;
+  }
+}
