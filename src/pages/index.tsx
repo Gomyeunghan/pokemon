@@ -55,7 +55,11 @@ export default function Home({
   useEffect(() => {
     setLoading(true);
 
-    router.push("/?page=0&pageGroup=1");
+    router.push(
+      `/?page=${page ? page : 0}&pageGroup=${
+        router.query.pageGroup ? Number(router.query.pageGroup) : 1
+      }`
+    );
     const fetchPokemon = async () => {
       const offset = page * 20;
       const newPokemon: Pokemon[] =

@@ -55,6 +55,7 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
+  margin: 50px 0px;
   gap: 1%;
 }
 
@@ -67,5 +68,7 @@
     gap: 1px;
   }
   .button_wrapper {
+    margin: 100px 0px;
+    gap: 2%;
   }
 }
