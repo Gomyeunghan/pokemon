@@ -11,14 +11,6 @@
   box-shadow: rgba(100, 100, 100, 0.142) 0px 0px 29px 0px;
 }
 
-@media (max-width: 768px) {
-  .box {
-    width: 100%;
-    height: auto;
-    padding: 0px;
-  }
-}
-
 .container {
   width: 100%;
   display: flex;
@@ -159,4 +151,15 @@
 
 .water {
   background: #539ddf;
+}
+@media (max-width: 768px) {
+  .box {
+    width: 100%;
+    height: auto;
+    padding: 50px 0px;
+  }
+  .container img {
+    max-width: 150px;
+    min-width: 150px;
+  }
 }
