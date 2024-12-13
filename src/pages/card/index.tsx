@@ -88,7 +88,12 @@ export default function Card({
       </motion.div>
 
       <span className={S.name}>
-        {koreanData ? koreanData.names[2].name : "로딩중"}
+        {koreanData
+          ? koreanData.names
+              .filter((item) => item.language.name === "ko")
+              .map((item) => item.name)
+              .join(",")
+          : "로딩중"}
       </span>
     </div>
   );

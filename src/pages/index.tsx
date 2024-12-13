@@ -8,25 +8,25 @@ import Card from "./card";
 import S from "./index.module.css";
 import { useRouter } from "next/router";
 import { GetServerSidePropsContext } from "next";
-import { useFetchPokemonData } from "@/lib/useFetchPokemonData";
 import Head from "next/head";
+import { fetchTotalPokemonCount } from "@/lib/pokemoncount";
+import { motion } from "framer-motion";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const query = context.query;
+  const { page = "0", pageGroup = "1" } = context.query;
+  const offset = Number(page) * 20;
   const pokemon = await getAllPokemon(
-    `https://pokeapi.co/api/v2/pokemon/?limit=${Number(query.limit)}&offset=0/`
+    `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${offset}/`
   );
   const koreanName = await Promise.all(
-    pokemon!.map(async (poke) => {
-      const data = await fetchKoreanName(poke.id);
-      return data;
-    })
+    (pokemon ?? []).map(async (poke) => fetchKoreanName(poke.id))
   );
+  const allPokemon = await fetchTotalPokemonCount();
 
   return {
-    props: { pokemon, koreanName, query: context.query },
+    props: { pokemon, koreanName, query: context.query, allPokemon },
   };
 };
 
@@ -34,47 +34,80 @@ export default function Home({
   pokemon,
   koreanName,
   query,
+  allPokemon,
 }: {
   pokemon: Pokemon[];
   koreanName: korean[];
-  query: { limit: string };
+  query: { page: string; pageGroup: string };
+  allPokemon: { count: number };
 }) {
   const router = useRouter();
-  const [currentLimit, setCurrentLimit] = useState(Number(query.limit));
   const [pokemonList, setPokemonList] = useState(pokemon);
   const [koreanNameList, setKoreanNameList] = useState(koreanName);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(Number(query.page));
+  const [isLoading, setLoading] = useState(false);
+
+  const pageCount = Math.ceil(allPokemon.count / 20);
+  const pageGrupCount = Math.ceil(pageCount / 5);
+  const page = Number(query.page || "0");
+
   useEffect(() => {
-    router.push(`/?limit=${currentLimit}`);
-  }, []);
+    setLoading(true);
+    const fetchPokemon = async () => {
+      const offset = page * 20;
+      const newPokemon: Pokemon[] =
+        (await getAllPokemon(
+          `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${offset}/`
+        )) || [];
 
-  const handleClick = async () => {
-    const newLimit = currentLimit + 20;
-    setCurrentLimit(newLimit);
-    await router.push(`?limit=${newLimit}`, undefined, {
-      shallow: true,
-    });
-    try {
-      const newPokemon = await getAllPokemon(
-        `https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${currentLimit}}/`
+      const newKoreanName = await Promise.all(
+        pokemon!.map(async (poke) => {
+          const data = await fetchKoreanName(poke.id);
+          return data;
+        })
       );
+      setPokemonList(newPokemon);
+      setKoreanNameList(
+        newKoreanName.filter((name): name is korean => name !== null)
+      );
+      setLoading(false);
+    };
 
-      if (newPokemon) {
-        setPokemonList([...pokemonList, ...newPokemon]);
-        const koreanName = await Promise.all(
-          newPokemon!.map(async (poke: Pokemon): Promise<korean> => {
-            const data = await fetchKoreanName(poke.id);
-
-            return data!;
-          })
-        );
-        if (koreanName && koreanName.length > 0) {
-          setKoreanNameList([...koreanNameList, ...koreanName]);
-        }
-      }
-    } catch (error) {
-      console.log(error);
+    if (query.page) {
+      fetchPokemon();
     }
+  }, [query.page]);
+
+  useEffect(() => {
+    const pageGroupFromQuery = router.query.pageGroup
+      ? Number(router.query.pageGroup)
+      : 1;
+
+    setCurrentPage(pageGroupFromQuery);
+  }, [query.pageGroup]);
+
+  const handlePageClick = async (page: number) => {
+    setLoading(true);
+    setPokemonList([]);
+    await router.push(`?page=${page}&pageGroup=${currentPage}`, undefined, {
+      shallow: false,
+    });
+    setLoading(false);
   };
+  const handleNextGroup = () => {
+    const nextGroup = currentPage + 1;
+    setCurrentPage(nextGroup);
+    router.push(`?pageGroup=${nextGroup}`, undefined, { shallow: true });
+  };
+
+  const handlePrevGroup = () => {
+    const prevGroup = Math.max(currentPage - 1, 1);
+    setCurrentPage(prevGroup);
+    router.push(`?pageGroup=${prevGroup}`, undefined, { shallow: true });
+  };
+
+  console.log(koreanNameList);
 
   return (
     <>
@@ -86,19 +119,84 @@ export default function Home({
         />
         <link rel="icon" href="/pokemon1702772640.png"></link>
       </Head>
+      {!isLoading ? (
+        <main
+          style={{ display: "flex", flexWrap: "wrap", gap: "50px" }}
+          className={S.container}
+        >
+          {pokemonList.map((poke: Pokemon, index: number) => {
+            const koreanData = koreanNameList[index];
 
-      <main
-        style={{ display: "flex", flexWrap: "wrap", gap: "50px" }}
-        className={S.container}
-      >
-        {pokemonList.map((poke: Pokemon, index: number) => {
-          const koreanData = koreanNameList[poke.id - 1];
-          return <Card key={index} poke={poke} koreanData={koreanData}></Card>;
-        })}
-      </main>
-      <button onClick={handleClick} className={S.button}>
-        더보기
-      </button>
+            return (
+              <Card key={index} poke={poke} koreanData={koreanData}></Card>
+            );
+          })}
+        </main>
+      ) : (
+        <div>loading...</div>
+      )}
+      {!isLoading ? (
+        <div className={S.button_wrapper}>
+          {currentPage > 1 ? (
+            <motion.button
+              onClick={handlePrevGroup}
+              className={S.next_button}
+              whileHover={{ scale: 1.07 }}
+            >
+              이전
+            </motion.button>
+          ) : (
+            ""
+          )}
+
+          {Array.from({
+            length: Math.max(
+              0,
+              Math.min(pageCount - (Math.max(1, currentPage) - 1) * 5, 5)
+            ),
+          }).map((_, index) => {
+            const buttonPage = index + (Math.max(1, currentPage) - 1) * 5;
+
+            return Number(buttonPage) === Number(query.page) ? (
+              <button
+                disabled
+                className={S.active_button}
+                key={index}
+                onClick={() => {
+                  handlePageClick(buttonPage);
+                }}
+              >
+                {buttonPage + 1}
+              </button>
+            ) : (
+              <motion.button
+                whileHover={{ scale: 1.07 }}
+                className={S.page_button}
+                key={index}
+                onClick={() => {
+                  handlePageClick(buttonPage);
+                }}
+              >
+                {buttonPage + 1}
+              </motion.button>
+            );
+          })}
+
+          {currentPage < pageGrupCount ? (
+            <motion.button
+              onClick={handleNextGroup}
+              className={S.next_button}
+              whileHover={{ scale: 1.07 }}
+            >
+              다음
+            </motion.button>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : (
+        ""
+      )}
     </>
   );
 }

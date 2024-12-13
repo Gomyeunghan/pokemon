@@ -34,7 +34,7 @@ export default function GlobalLayout({
   return (
     <div className={S.container}>
       <header className={S.header}>
-        <Link href="/?limit=20">
+        <Link href="/?page=0&pageGroup=1">
           <img src="/International_Pokémon_logo.svg.webp" alt="logo" />
         </Link>
       </header>
