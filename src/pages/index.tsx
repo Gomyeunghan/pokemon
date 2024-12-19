@@ -120,6 +120,15 @@ export default function Home({
       <Head>
         <title>포켓몬 도감</title>
         <meta
+          name="description"
+          content="포켓몬 도감에서 다양한 포켓몬 정보를 찾아보세요."
+        />
+        <meta property="og:title" content="포켓몬 도감" />
+        <meta
+          property="og:description"
+          content="포켓몬 도감에서 다양한 포켓몬 정보를 찾아보세요."
+        />
+        <meta
           property="og:image"
           content="International_Pokémon_logo.svg.webp"
         />
