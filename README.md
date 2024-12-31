@@ -1,40 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+<h1>포켓몬 도감 웹사이트</h1>
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+- Next.Js를 사용하여 SSR 을 사용하여 포켓몬 도감을 만듬
+- 포켓몬 api를 활용하여 1세대부터 8세대 포켓몬 도감
+- 새로고침을해도 원하는 페이지에 유지할수있도록 페이지값을 파라미터에 저장하여 새로고침 하여도 원하는 페이지에서 유지가능
+- 무한스크롤로 구현하려했으나, UX관점에서 내가 원하는 포켓몬의 위치를 찾는것이 옳은 기능이라 생각하여 구식이지만, 페이지 방식으로 구현함
+- 검색기능 구현시 검색된 포켓몬의 이름을 찾고자할때, 하나씩 패칭하는것이 비효율적이라고 깨닳음 너무느림,
+- 그래서 처음에 많은 데이터를 불러오더라도 첫패칭시 1500개의 데이터를 한번에 가져와 그안에서 값을 찾도록 기능을 구현함
