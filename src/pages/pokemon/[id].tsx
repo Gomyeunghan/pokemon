@@ -59,6 +59,8 @@ export default function Pokemon({
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  console.log(poke);
+
   const testText =
     test?.flavor_text_entries.filter(
       (item: { language: { name: string } }) => item.language.name === "ko"
